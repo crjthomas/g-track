@@ -1,0 +1,29 @@
+{
+    "project_info": {
+      "project_number": "699005980660",
+      "project_id": "nist-5b981",
+      "storage_bucket": "nist-5b981.firebasestorage.app"
+    },
+    "client": [
+      {
+        "client_info": {
+          "mobilesdk_app_id": "1:699005980660:android:78efc81b98fee9fd1173a1",
+          "android_client_info": {
+            "package_name": "com.gtrack"
+          }
+        },
+        "oauth_client": [],
+        "api_key": [
+          {
+            "current_key": "AIzaSyBKhsUlwp6SqduUHkSUcUGObjmp4zpLdJ4"
+          }
+        ],
+        "services": {
+          "appinvite_service": {
+            "other_platform_oauth_client": []
+          }
+        }
+      }
+    ],
+    "configuration_version": "1"
+  }

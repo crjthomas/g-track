@@ -1,97 +1,199 @@
-This is a new [**React Native**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
+# Allergy Tracker Mobile App
 
-# Getting Started
+A production-ready React Native Android app for tracking nutritional intake, allergy symptoms, and growth metrics. Built with Firebase cloud sync and data export capabilities for medical consultations.
 
-> **Note**: Make sure you have completed the [Set Up Your Environment](https://reactnative.dev/docs/set-up-your-environment) guide before proceeding.
+## Features
 
-## Step 1: Start Metro
+### Symptom Tracker
+- Log heartburn/reflux severity (1-10 scale)
+- Track nausea and severity
+- Record vomiting episodes with frequency and color
+- Identify triggers (specific foods, stress, cold/flu)
+- Add notes for each entry
 
-First, you will need to run **Metro**, the JavaScript build tool for React Native.
+### Nutrition Intake Tracker
+- Log meals by type (Breakfast, Lunch, Dinner, Snack)
+- Food search with autocomplete
+- Automatic calorie calculation
+- High-calorie booster identification
+- Daily calorie summary
+- Weekly/monthly trends
 
-To start the Metro dev server, run the following command from the root of your React Native project:
+### Growth Tracker
+- Weekly weight and height measurements
+- Automatic BMI calculation
+- Growth charts visualization
+- Weight and height trend tracking
 
-```sh
-# Using npm
-npm start
+### Data Export
+- Export to CSV format
+- Export to PDF (planned)
+- Date range selection
+- Share via email/messaging apps
 
-# OR using Yarn
-yarn start
+## Technology Stack
+
+- **Framework**: React Native 0.83.1
+- **Language**: TypeScript
+- **Backend**: Firebase (Authentication, Firestore)
+- **UI Library**: React Native Paper
+- **Navigation**: React Navigation
+- **Charts**: react-native-chart-kit
+- **State Management**: React Context API + AsyncStorage
+
+## Prerequisites
+
+- Node.js >= 20
+- React Native development environment set up
+- Android Studio (for Android development)
+- Firebase account
+
+## Installation
+
+1. Clone the repository:
+```bash
+git clone <repository-url>
+cd g-track
 ```
 
-## Step 2: Build and run your app
+2. Install dependencies:
+```bash
+npm install
+```
 
-With Metro running, open a new terminal window/pane from the root of your React Native project, and use one of the following commands to build and run your Android or iOS app:
+3. For iOS (if developing for iOS):
+```bash
+cd ios
+pod install
+cd ..
+```
+
+## Firebase Setup
+
+1. Create a Firebase project at [Firebase Console](https://console.firebase.google.com/)
+2. Add an Android app to your Firebase project
+3. Download `google-services.json` and place it in `android/app/`
+4. Update `src/services/firebase.ts` with your Firebase configuration
+5. Enable Authentication (Email/Password) in Firebase Console
+6. Create a Firestore database
+7. Deploy security rules (see `firestore.rules`)
+
+See `FIREBASE_SETUP.md` for detailed instructions.
+
+## Running the App
 
 ### Android
 
-```sh
-# Using npm
+```bash
 npm run android
-
-# OR using Yarn
-yarn android
 ```
 
 ### iOS
 
-For iOS, remember to install CocoaPods dependencies (this only needs to be run on first clone or after updating native deps).
-
-The first time you create a new project, run the Ruby bundler to install CocoaPods itself:
-
-```sh
-bundle install
-```
-
-Then, and every time you update your native dependencies, run:
-
-```sh
-bundle exec pod install
-```
-
-For more information, please visit [CocoaPods Getting Started guide](https://guides.cocoapods.org/using/getting-started.html).
-
-```sh
-# Using npm
+```bash
 npm run ios
-
-# OR using Yarn
-yarn ios
 ```
 
-If everything is set up correctly, you should see your new app running in the Android Emulator, iOS Simulator, or your connected device.
+## Project Structure
 
-This is one way to run your app — you can also build it directly from Android Studio or Xcode.
+```
+g-track/
+├── src/
+│   ├── screens/          # Screen components
+│   ├── components/       # Reusable components
+│   ├── services/         # Firebase and API services
+│   ├── models/           # Data models and validation
+│   ├── utils/            # Utility functions
+│   ├── context/          # React Context providers
+│   └── navigation/       # Navigation configuration
+├── android/              # Android native code
+├── ios/                  # iOS native code
+└── firebase.json         # Firebase configuration
+```
 
-## Step 3: Modify your app
+## Building for Production
 
-Now that you have successfully run the app, let's make changes!
+### Android
 
-Open `App.tsx` in your text editor of choice and make some changes. When you save, your app will automatically update and reflect these changes — this is powered by [Fast Refresh](https://reactnative.dev/docs/fast-refresh).
+1. Generate a signing key:
+```bash
+keytool -genkeypair -v -storetype PKCS12 -keystore my-release-key.keystore -alias my-key-alias -keyalg RSA -keysize 2048 -validity 10000
+```
 
-When you want to forcefully reload, for example to reset the state of your app, you can perform a full reload:
+2. Update `android/app/build.gradle` with your keystore configuration
 
-- **Android**: Press the <kbd>R</kbd> key twice or select **"Reload"** from the **Dev Menu**, accessed via <kbd>Ctrl</kbd> + <kbd>M</kbd> (Windows/Linux) or <kbd>Cmd ⌘</kbd> + <kbd>M</kbd> (macOS).
-- **iOS**: Press <kbd>R</kbd> in iOS Simulator.
+3. Build release APK:
+```bash
+cd android
+./gradlew assembleRelease
+```
 
-## Congratulations! :tada:
+4. Build release AAB (for Play Store):
+```bash
+cd android
+./gradlew bundleRelease
+```
 
-You've successfully run and modified your React Native App. :partying_face:
+## Configuration
 
-### Now what?
+### Firebase Configuration
 
-- If you want to add this new React Native code to an existing application, check out the [Integration guide](https://reactnative.dev/docs/integration-with-existing-apps).
-- If you're curious to learn more about React Native, check out the [docs](https://reactnative.dev/docs/getting-started).
+Update `src/services/firebase.ts` with your Firebase project credentials:
 
-# Troubleshooting
+```typescript
+const firebaseConfig = {
+  apiKey: "YOUR_API_KEY",
+  authDomain: "YOUR_AUTH_DOMAIN",
+  projectId: "YOUR_PROJECT_ID",
+  storageBucket: "YOUR_STORAGE_BUCKET",
+  messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+  appId: "YOUR_APP_ID",
+};
+```
 
-If you're having issues getting the above steps to work, see the [Troubleshooting](https://reactnative.dev/docs/troubleshooting) page.
+### Android Configuration
 
-# Learn More
+- Update `android/app/build.gradle` with your package name and version
+- Configure signing keys for release builds
+- Update `AndroidManifest.xml` with required permissions
 
-To learn more about React Native, take a look at the following resources:
+## Security
 
-- [React Native Website](https://reactnative.dev) - learn more about React Native.
-- [Getting Started](https://reactnative.dev/docs/environment-setup) - an **overview** of React Native and how setup your environment.
-- [Learn the Basics](https://reactnative.dev/docs/getting-started) - a **guided tour** of the React Native **basics**.
-- [Blog](https://reactnative.dev/blog) - read the latest official React Native **Blog** posts.
-- [`@facebook/react-native`](https://github.com/facebook/react-native) - the Open Source; GitHub **repository** for React Native.
+- Firebase security rules ensure users can only access their own data
+- All sensitive data is encrypted in transit
+- Local storage uses AsyncStorage for offline support
+- Input validation on all forms
+
+## Privacy
+
+This app collects and stores:
+- User authentication data (email)
+- Symptom tracking data
+- Nutrition intake data
+- Growth measurements
+
+All data is stored securely in Firebase and is only accessible by the authenticated user. Data can be exported and deleted at any time.
+
+## Contributing
+
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Submit a pull request
+
+## License
+
+[Add your license here]
+
+## Support
+
+For issues and questions, please open an issue on GitHub.
+
+## Roadmap
+
+- [ ] PDF export functionality
+- [ ] iOS version
+- [ ] Push notifications for reminders
+- [ ] Data analytics and insights
+- [ ] Multi-child support
+- [ ] Integration with health apps
