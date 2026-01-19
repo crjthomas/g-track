@@ -1,6 +1,6 @@
 # Allergy Tracker Mobile App
 
-A production-ready React Native Android app for tracking nutritional intake, allergy symptoms, and growth metrics. Built with Firebase cloud sync and data export capabilities for medical consultations.
+A production-ready React Native Android app for tracking nutritional intake, allergy symptoms, and growth metrics. Built with Firebase cloud sync and data export capabilities for medical consultations. Supports Meal plan generation using AI
 
 ## Features
 
