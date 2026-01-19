@@ -1,7 +1,8 @@
 import { HighCalorieFoodSuggestion } from '../models/MealPlan';
 import { NutritionEntry } from '../models/NutritionEntry';
 import { getNutritionEntriesByDateRange, getHighCalorieEntries } from './nutritionService';
-import { getStartOfDay, getEndOfDay, subDays } from '../utils/dateUtils';
+import { getStartOfDay, getEndOfDay } from '../utils/dateUtils';
+import { subDays } from 'date-fns';
 
 /**
  * High-calorie foods database with growth benefits

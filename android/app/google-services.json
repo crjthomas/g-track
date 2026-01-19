@@ -1,29 +1,55 @@
 {
-    "project_info": {
-      "project_number": "699005980660",
-      "project_id": "nist-5b981",
-      "storage_bucket": "nist-5b981.firebasestorage.app"
-    },
-    "client": [
-      {
-        "client_info": {
-          "mobilesdk_app_id": "1:699005980660:android:78efc81b98fee9fd1173a1",
-          "android_client_info": {
-            "package_name": "com.gtrack"
+  "project_info": {
+    "project_number": "699005980660",
+    "project_id": "nist-5b981",
+    "storage_bucket": "nist-5b981.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:699005980660:android:78efc81b98fee9fd1173a1",
+        "android_client_info": {
+          "package_name": "com.gtrack"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "699005980660-3i24p6dlinv9jp7asilb0s3rlh9n4fvp.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.gtrack",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
           }
         },
-        "oauth_client": [],
-        "api_key": [
-          {
-            "current_key": "AIzaSyBKhsUlwp6SqduUHkSUcUGObjmp4zpLdJ4"
+        {
+          "client_id": "699005980660-7lscok6qk36j3e7ejvkl51n3vdq99u1t.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.gtrack",
+            "certificate_hash": "f44cbaf10e7aa1a1c6e0f2a4fa5858da62349656"
           }
-        ],
-        "services": {
-          "appinvite_service": {
-            "other_platform_oauth_client": []
-          }
+        },
+        {
+          "client_id": "699005980660-ihnleucm5c1nqsrljka53tsmfare7v8l.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBKhsUlwp6SqduUHkSUcUGObjmp4zpLdJ4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "699005980660-ihnleucm5c1nqsrljka53tsmfare7v8l.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
-    ],
-    "configuration_version": "1"
-  }
+    }
+  ],
+  "configuration_version": "1"
+}

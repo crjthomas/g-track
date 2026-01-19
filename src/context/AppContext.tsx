@@ -28,14 +28,30 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
 
   useEffect(() => {
     const unsubscribe = auth().onAuthStateChanged(async (currentUser) => {
-      setUser(currentUser);
-      setLoading(false);
-      
-      // Store user ID in AsyncStorage for offline access
-      if (currentUser) {
-        await AsyncStorage.setItem('userId', currentUser.uid);
-      } else {
-        await AsyncStorage.removeItem('userId');
+      try {
+        setUser(currentUser);
+        setLoading(false);
+        
+        // Store user ID in AsyncStorage for offline access
+        if (currentUser) {
+          try {
+            await AsyncStorage.setItem('userId', currentUser.uid);
+          } catch (storageError) {
+            console.error('Error storing userId:', storageError);
+            // Don't throw - this is not critical
+          }
+        } else {
+          try {
+            await AsyncStorage.removeItem('userId');
+          } catch (storageError) {
+            console.error('Error removing userId:', storageError);
+            // Don't throw - this is not critical
+          }
+        }
+      } catch (error) {
+        console.error('Error in auth state change:', error);
+        setLoading(false);
+        // Don't crash the app - just set loading to false
       }
     });
 

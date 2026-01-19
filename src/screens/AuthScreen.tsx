@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { View, StyleSheet, ScrollView, Alert, KeyboardAvoidingView, Platform } from 'react-native';
-import { TextInput, Button, Text, Card } from 'react-native-paper';
-import { registerUser, signInUser } from '../services/authService';
+import { TextInput, Button, Text, Card, Divider } from 'react-native-paper';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import { registerUser, signInUser, signInWithGoogle } from '../services/authService';
 
 const AuthScreen: React.FC = () => {
   const [email, setEmail] = useState('');
@@ -29,7 +30,23 @@ const AuthScreen: React.FC = () => {
         Alert.alert('Success', 'Account created successfully!');
       }
     } catch (error: any) {
+      console.error('Auth error:', error);
       Alert.alert('Error', error.message || 'Authentication failed');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleGoogleSignIn = async () => {
+    setLoading(true);
+    try {
+      await signInWithGoogle();
+    } catch (error: any) {
+      // Don't show alert if user cancelled
+      if (error.message && !error.message.includes('cancelled')) {
+        console.error('Google Sign-In error:', error);
+        Alert.alert('Error', error.message || 'Failed to sign in with Google');
+      }
     } finally {
       setLoading(false);
     }
@@ -82,10 +99,27 @@ const AuthScreen: React.FC = () => {
             <Button
               mode="text"
               onPress={() => setIsLogin(!isLogin)}
-              style={styles.switchButton}>
+              style={styles.switchButton}
+              disabled={loading}>
               {isLogin
                 ? "Don't have an account? Sign Up"
                 : 'Already have an account? Sign In'}
+            </Button>
+
+            <View style={styles.dividerContainer}>
+              <Divider style={styles.divider} />
+              <Text style={styles.dividerText}>OR</Text>
+              <Divider style={styles.divider} />
+            </View>
+
+            <Button
+              mode="outlined"
+              onPress={handleGoogleSignIn}
+              loading={loading}
+              disabled={loading}
+              style={styles.googleButton}
+              icon={() => <Icon name="google" size={20} color="#4285F4" />}>
+              Continue with Google
             </Button>
           </Card.Content>
         </Card>
@@ -129,6 +163,24 @@ const styles = StyleSheet.create({
   },
   switchButton: {
     marginTop: 16,
+  },
+  dividerContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginVertical: 20,
+  },
+  divider: {
+    flex: 1,
+  },
+  dividerText: {
+    marginHorizontal: 16,
+    color: '#666',
+    fontSize: 14,
+  },
+  googleButton: {
+    marginTop: 8,
+    paddingVertical: 4,
+    borderColor: '#4285F4',
   },
 });
 

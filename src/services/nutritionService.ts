@@ -1,5 +1,8 @@
 import firestore from '@react-native-firebase/firestore';
-import { NutritionEntry } from '../models/NutritionEntry';
+import { NutritionEntry, calculateDailyCalories } from '../models/NutritionEntry';
+
+// Re-export calculateDailyCalories for convenience
+export { calculateDailyCalories };
 
 const COLLECTION_NAME = 'nutrition';
 
