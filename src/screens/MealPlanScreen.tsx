@@ -25,6 +25,7 @@ import { getDailyMealPlanSuggestions } from '../services/aiMealPlanService';
 import { HighCalorieFoodSuggestion } from '../models/MealPlan';
 import { getNutritionEntriesByDate, calculateDailyCalories } from '../services/nutritionService';
 import { formatDate, getStartOfDay, getEndOfDay } from '../utils/dateUtils';
+import { exportMealPlanToCSV, shareFile, generateExportFilename } from '../utils/exportUtils';
 import DatePicker from '../components/DatePicker';
 import { RootStackParamList } from '../navigation/AppNavigator';
 
@@ -46,6 +47,34 @@ const MealPlanScreen: React.FC = () => {
     snacks: HighCalorieFoodSuggestion[];
   } | null>(null);
   const [currentCalories, setCurrentCalories] = useState<number>(0);
+  const [downloading, setDownloading] = useState(false);
+
+  const handleDownloadMealPlan = async () => {
+    if (!suggestions) {
+      Alert.alert('Error', 'No meal plan to download. Please generate a meal plan first.');
+      return;
+    }
+
+    setDownloading(true);
+    try {
+      const target = parseInt(targetCalories) || 2000;
+      const filename = generateExportFilename('meal_plan');
+      const filePath = await exportMealPlanToCSV(
+        suggestions,
+        selectedDate,
+        target,
+        currentCalories,
+        filename
+      );
+      await shareFile(filePath, 'Meal Plan Export');
+      Alert.alert('Success', 'Meal plan downloaded successfully!');
+    } catch (error: any) {
+      console.error('Download error:', error);
+      Alert.alert('Error', error.message || 'Failed to download meal plan');
+    } finally {
+      setDownloading(false);
+    }
+  };
 
   const loadMealPlan = useCallback(async () => {
     if (!user) return;
@@ -213,6 +242,18 @@ const MealPlanScreen: React.FC = () => {
             icon="refresh">
             Generate Meal Plan
           </Button>
+          
+          {suggestions && (
+            <Button
+              mode="outlined"
+              onPress={handleDownloadMealPlan}
+              loading={downloading}
+              disabled={downloading || !suggestions}
+              style={styles.downloadButton}
+              icon="download">
+              Download Meal Plan
+            </Button>
+          )}
         </Card.Content>
       </Card>
 
@@ -301,6 +342,9 @@ const styles = StyleSheet.create({
     marginVertical: 8,
   },
   generateButton: {
+    marginTop: 8,
+  },
+  downloadButton: {
     marginTop: 8,
   },
   progressCard: {

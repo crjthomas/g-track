@@ -3,6 +3,7 @@ import Share from 'react-native-share';
 import { SymptomEntry } from '../models/SymptomEntry';
 import { NutritionEntry } from '../models/NutritionEntry';
 import { GrowthEntry } from '../models/GrowthEntry';
+import { HighCalorieFoodSuggestion } from '../models/MealPlan';
 import { formatDate, formatDateTime } from './dateUtils';
 
 const EXPORTS_DIR = `${RNFS.DocumentDirectoryPath}/exports`;
@@ -238,6 +239,89 @@ export const shareFile = async (filePath: string, title: string = 'Export') => {
       throw error;
     }
   }
+};
+
+/**
+ * Export meal plan to CSV
+ */
+export const exportMealPlanToCSV = async (
+  mealPlan: {
+    breakfast: HighCalorieFoodSuggestion[];
+    lunch: HighCalorieFoodSuggestion[];
+    dinner: HighCalorieFoodSuggestion[];
+    snacks: HighCalorieFoodSuggestion[];
+  },
+  date: Date,
+  targetCalories: number,
+  currentCalories: number,
+  filename: string = 'meal_plan_export.csv'
+): Promise<string> => {
+  await ensureExportsDir();
+
+  const sections: string[] = [];
+  
+  // Ensure date is at local midnight to avoid timezone issues
+  const localDate = new Date(date);
+  localDate.setHours(0, 0, 0, 0);
+  
+  // Header
+  sections.push('AI-GENERATED MEAL PLAN');
+  sections.push(`Date: ${formatDate(localDate)}`);
+  sections.push(`Target Calories: ${targetCalories} kcal`);
+  sections.push(`Current Calories: ${currentCalories} kcal`);
+  sections.push(`Remaining: ${targetCalories - currentCalories} kcal`);
+  sections.push('');
+  
+  // Helper to format meal suggestions
+  const formatMealSuggestions = (
+    mealType: string,
+    suggestions: HighCalorieFoodSuggestion[]
+  ): string[] => {
+    const mealSection: string[] = [];
+    mealSection.push(mealType.toUpperCase());
+    mealSection.push('Food Name,Quantity,Unit,Calories per 100g,Total Calories,Category,Reason,Benefits');
+    
+    suggestions.forEach((suggestion) => {
+      const totalCalories = Math.round(
+        (suggestion.caloriesPer100g / 100) * suggestion.recommendedQuantity
+      );
+      const benefits = suggestion.benefits ? suggestion.benefits.join('; ') : '';
+      
+      mealSection.push([
+        `"${suggestion.foodName}"`,
+        suggestion.recommendedQuantity.toString(),
+        suggestion.unit,
+        suggestion.caloriesPer100g.toString(),
+        totalCalories.toString(),
+        suggestion.category || '',
+        `"${suggestion.reason}"`,
+        `"${benefits}"`,
+      ].join(','));
+    });
+    
+    mealSection.push('');
+    return mealSection;
+  };
+  
+  // Add each meal type
+  if (mealPlan.breakfast.length > 0) {
+    sections.push(...formatMealSuggestions('Breakfast', mealPlan.breakfast));
+  }
+  if (mealPlan.lunch.length > 0) {
+    sections.push(...formatMealSuggestions('Lunch', mealPlan.lunch));
+  }
+  if (mealPlan.dinner.length > 0) {
+    sections.push(...formatMealSuggestions('Dinner', mealPlan.dinner));
+  }
+  if (mealPlan.snacks.length > 0) {
+    sections.push(...formatMealSuggestions('Snacks', mealPlan.snacks));
+  }
+  
+  const csvContent = sections.join('\n');
+  const filePath = `${EXPORTS_DIR}/${filename}`;
+  await RNFS.writeFile(filePath, csvContent, 'utf8');
+  
+  return filePath;
 };
 
 /**

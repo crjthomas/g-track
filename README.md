@@ -1,8 +1,14 @@
-# Allergy Tracker Mobile App
+# Allergy Tracker Mobile App (GTrack)
 
-A production-ready React Native Android app for tracking nutritional intake, allergy symptoms, and growth metrics. Built with Firebase cloud sync and data export capabilities for medical consultations. Supports Meal plan generation using AI
+A production-ready React Native Android app for tracking nutritional intake, allergy symptoms, and growth metrics. Built with Firebase cloud sync and data export capabilities for medical consultations. Features AI-powered meal planning and multiple authentication options.
 
 ## Features
+
+### Authentication
+- **Email/Password Sign-In**: Secure account creation and login
+- **Google Sign-In**: Quick authentication with Google account
+- Secure user data with Firebase Authentication
+- Automatic session management
 
 ### Symptom Tracker
 - Log heartburn/reflux severity (1-10 scale)
@@ -25,21 +31,32 @@ A production-ready React Native Android app for tracking nutritional intake, all
 - Growth charts visualization
 - Weight and height trend tracking
 
+### AI Meal Planning
+- **Daily High-Calorie Meal Plans**: AI-generated suggestions to boost child growth
+- **Personalized Recommendations**: Based on eating history and calorie needs
+- **Meal-Specific Suggestions**: Tailored for Breakfast, Lunch, Dinner, and Snacks
+- **Calorie Tracking**: Track progress toward daily calorie targets
+- **Quick Add to Nutrition**: One-tap to add suggested foods to tracker
+- **Download Meal Plans**: Export meal plans as CSV files for sharing or printing
+
 ### Data Export
 - Export to CSV format
-- Export to PDF (planned)
+- Export meal plans as CSV
 - Date range selection
 - Share via email/messaging apps
+- Export to PDF (planned)
 
 ## Technology Stack
 
 - **Framework**: React Native 0.83.1
 - **Language**: TypeScript
 - **Backend**: Firebase (Authentication, Firestore)
+- **Authentication**: Firebase Auth with Google Sign-In integration
 - **UI Library**: React Native Paper
 - **Navigation**: React Navigation
 - **Charts**: react-native-chart-kit
 - **State Management**: React Context API + AsyncStorage
+- **File Sharing**: react-native-share, react-native-fs
 
 ## Prerequisites
 
@@ -74,11 +91,14 @@ cd ..
 2. Add an Android app to your Firebase project
 3. Download `google-services.json` and place it in `android/app/`
 4. Update `src/services/firebase.ts` with your Firebase configuration
-5. Enable Authentication (Email/Password) in Firebase Console
-6. Create a Firestore database
-7. Deploy security rules (see `firestore.rules`)
+5. Enable Authentication in Firebase Console:
+   - Enable **Email/Password** authentication
+   - Enable **Google** authentication (for Google Sign-In)
+6. Add SHA-1 fingerprints to Firebase Console for Google Sign-In (see `GOOGLE_SIGNIN_SETUP.md`)
+7. Create a Firestore database
+8. Deploy security rules (see `firestore.rules`)
 
-See `FIREBASE_SETUP.md` for detailed instructions.
+See `FIREBASE_SETUP.md` and `GOOGLE_SIGNIN_SETUP.md` for detailed instructions.
 
 ## Running the App
 
@@ -189,11 +209,29 @@ All data is stored securely in Firebase and is only accessible by the authentica
 
 For issues and questions, please open an issue on GitHub.
 
+## Recent Updates
+
+### Version 1.0.1
+- ✅ Added Google Sign-In authentication
+- ✅ Added meal plan download/export feature
+- ✅ Improved error handling and crash prevention
+- ✅ Fixed various UI rendering issues
+- ✅ Enhanced authentication flow
+
 ## Roadmap
 
-- [ ] PDF export functionality
+- [ ] PDF export functionality for all data types
 - [ ] iOS version
 - [ ] Push notifications for reminders
-- [ ] Data analytics and insights
+- [ ] Data analytics and insights dashboard
 - [ ] Multi-child support
 - [ ] Integration with health apps
+- [ ] Meal plan PDF export with visual formatting
+
+## Documentation
+
+- **Firebase Setup**: See `FIREBASE_SETUP.md`
+- **Google Sign-In Setup**: See `GOOGLE_SIGNIN_SETUP.md`
+- **Meal Planning**: See `MEAL_PLANNING_FEATURE.md`
+- **Generate APK**: See `GENERATE_APK.md`
+- **Publishing to Play Store**: See `GOOGLE_PLAY_PUBLISH.md`
